@@ -1,4 +1,5 @@
 using AbruzaCosmicProducts_Backend;
+using AbruzaCosmicProducts_Backend.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AbruzaDBContext>(option =>{
     option.UseSqlServer(builder.Configuration.GetConnectionString("AbruzaDB"));
 });
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 var app = builder.Build();
 

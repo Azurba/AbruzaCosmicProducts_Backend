@@ -91,3 +91,4 @@ D:\Github\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\AbruzaCosmic
 D:\Github\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\obj\Debug\net6.0\AbruzaCosmicProducts_Backend.pdb
 D:\Github\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\obj\Debug\net6.0\AbruzaCosmicProducts_Backend.genruntimeconfig.cache
 D:\Github\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\obj\Debug\net6.0\ref\AbruzaCosmicProducts_Backend.dll
+D:\Github\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\AbruzaCosmicProducts_Backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
