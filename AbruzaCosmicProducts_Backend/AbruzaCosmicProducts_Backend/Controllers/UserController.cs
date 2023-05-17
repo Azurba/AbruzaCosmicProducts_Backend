@@ -1,7 +1,6 @@
 ﻿using AbruzaCosmicProducts_Backend.Model;
 using AbruzaCosmicProducts_Backend.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,6 +26,8 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             _configuration = configuration;
             _userService = userService;
         }
+
+        //                                     ==== Authentication user operations ====
 
         [HttpGet]
         [Authorize]
@@ -74,10 +75,62 @@ namespace AbruzaCosmicProducts_Backend.Controllers
 
             return Ok(token);
         }
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
+            }
+        }
+        private string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+        {
+            //new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Role, "Admin")
+        };
+
+            byte[] key = GenerateHmacSha512Key();
+
+            var symmetricKey = new SymmetricSecurityKey(key);
+
+            //Here we're creating the JWT token passing the claims, the credential and the expiration time (1 day)
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha512)
+            );
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
+        }
+
+        //This creates a key with minimum size of 512, as required by the documentation
+        private byte[] GenerateHmacSha512Key()
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                byte[] key = new byte[64]; // 64 bytes = 512 bits
+                rng.GetBytes(key);
+                return key;
+            }
+        }
 
 
-
-        // General user operations
+        //                                      ==== General user operations ====
 
         [HttpGet("users")]
         public async Task<ActionResult<List<User>>> GetAllUsers()
@@ -132,60 +185,6 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             return NoContent();
         }
 
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(passwordHash);
-            }
-        }
-        private string CreateToken(User user)
-        {
-            List<Claim> claims = new List<Claim>
-        {
-            //new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.Email),
-            new Claim(ClaimTypes.Role, "Admin")
-        };
-
-            byte[] key = GenerateHmacSha512Key();
-
-            var symmetricKey = new SymmetricSecurityKey(key);
-
-            //Here we're creating the JWT token passing the claims, the credential and the expiration time (1 day)
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha512)
-            );
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
-        }
-
-        //This creates a key with minimum size of 512, as required by the documentation
-        private byte[] GenerateHmacSha512Key()
-        {
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                byte[] key = new byte[64]; // 64 bytes = 512 bits
-                rng.GetBytes(key);
-                return key;
-            }
-        }
     }
 
 }
