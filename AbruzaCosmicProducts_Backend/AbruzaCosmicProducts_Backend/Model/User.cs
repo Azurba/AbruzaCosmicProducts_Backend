@@ -8,3 +8,13 @@
         public string Password { get; set; }
     }
 }
+
+//{
+//    public class UserCart
+//    {
+//        public int Id { get; set; }
+//        public List<Product> items { get; set; }
+
+//    }
+//}
+

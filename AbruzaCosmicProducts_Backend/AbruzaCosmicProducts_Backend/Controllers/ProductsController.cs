@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AbruzaCosmicProducts_Backend.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AbruzaCosmicProducts_Backend.Controllers
 {
@@ -12,6 +14,11 @@ namespace AbruzaCosmicProducts_Backend.Controllers
         public ProductsController(AbruzaDBContext context)
         {
             this.context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Product>>> getAllProducts() {
+            return Ok(await context.Product.ToListAsync());
         }
     }
 }
