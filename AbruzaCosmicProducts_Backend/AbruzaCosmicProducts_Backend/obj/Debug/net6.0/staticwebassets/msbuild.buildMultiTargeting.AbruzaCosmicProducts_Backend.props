@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\AbruzaCosmicProducts_Backend.props" />
+</Project>
