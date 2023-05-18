@@ -14,9 +14,16 @@ builder.Services.AddDbContext<AbruzaDBContext>(option =>{
     option.UseSqlServer(builder.Configuration.GetConnectionString("AbruzaDB"));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
-
 
 var app = builder.Build();
 
@@ -26,6 +33,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 
