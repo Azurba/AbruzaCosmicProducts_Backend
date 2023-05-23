@@ -33,6 +33,20 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             return Ok(product);
         }
 
+        [HttpGet("type/{productType}")]
+        public async Task<ActionResult<List<Product>>> GetProductsByType(string productType)
+        {
+            var products = await context.Product.Where(p => p.Type == productType).ToListAsync();
+
+            if (products == null || products.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(products);
+        }
+
+
         [HttpPost]
         public async Task<ActionResult<Product>> AddProduct(Product product)
         {
