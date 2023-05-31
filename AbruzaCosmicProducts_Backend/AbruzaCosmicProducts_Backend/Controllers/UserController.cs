@@ -191,14 +191,14 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             return Ok(user);
         }
 
-        [HttpDelete("users")]
-        public async Task<ActionResult> DeleteAllUsers()
-        {
-            _context.User.RemoveRange(_context.User);
-            await _context.SaveChangesAsync();
+        //[HttpDelete("users")]
+        //public async Task<ActionResult> DeleteAllUsers()
+        //{
+        //    _context.User.RemoveRange(_context.User);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
     }
 

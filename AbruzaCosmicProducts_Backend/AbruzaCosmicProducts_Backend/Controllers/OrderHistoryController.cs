@@ -64,21 +64,21 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAll()
-        {
-            try
-            {
-                _context.OrderHistory.RemoveRange(_context.OrderHistory);
-                await _context.SaveChangesAsync();
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteAll()
+        //{
+        //    try
+        //    {
+        //        _context.OrderHistory.RemoveRange(_context.OrderHistory);
+        //        await _context.SaveChangesAsync();
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Failed to delete all order history: {ex.Message}");
-            }
-        }
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Failed to delete all order history: {ex.Message}");
+        //    }
+        //}
 
     }
 }

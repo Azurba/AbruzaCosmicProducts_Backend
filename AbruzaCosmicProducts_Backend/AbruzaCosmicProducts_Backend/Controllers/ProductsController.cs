@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AbruzaCosmicProducts_Backend.Controllers
 {
@@ -17,9 +20,11 @@ namespace AbruzaCosmicProducts_Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> getAllProducts() {
+        public async Task<ActionResult<List<Product>>> GetAllProducts()
+        {
             return Ok(await context.Product.ToListAsync());
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> SearchProduct(int id)
         {
@@ -46,14 +51,45 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             return Ok(products);
         }
 
-
         [HttpPost]
         public async Task<ActionResult<Product>> AddProduct(Product product)
         {
             context.Product.Add(product);
             await context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(getAllProducts), new { id = product.Id }, product);
+            return CreatedAtAction(nameof(GetAllProducts), new { id = product.Id }, product);
+        }
+
+        [HttpPost("multiple")]
+        public IActionResult AddMultipleProducts([FromBody] List<Product> products)
+        {
+            try
+            {
+                // Check if the products list is null or empty
+                if (products == null || products.Count == 0)
+                {
+                    return BadRequest("No products provided");
+                }
+
+                // Your logic to add the products to the database goes here
+                foreach (var product in products)
+                {
+                    // Perform necessary operations to add the product to the database
+                    // This could include validation, mapping, and saving to the database context
+                    context.Product.Add(product);
+                }
+
+                // Save changes to the database
+                context.SaveChanges();
+
+                // Return a success response
+                return Ok("Products added successfully");
+            }
+            catch (Exception ex)
+            {
+                // If an exception occurs during the process, return an error response
+                return StatusCode(500, $"An error occurred while adding products: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
@@ -72,14 +108,13 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             return Ok(product);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteAll()
-        {
-            context.Product.RemoveRange(context.Product);
-            await context.SaveChangesAsync();
+        //[HttpDelete]
+        //public async Task<ActionResult> DeleteAll()
+        //{
+        //    context.Product.RemoveRange(context.Product);
+        //    await context.SaveChangesAsync();
 
-            return NoContent();
-        }
-
+        //    return NoContent();
+        //}
     }
 }
