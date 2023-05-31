@@ -132,11 +132,26 @@ namespace AbruzaCosmicProducts_Backend.Controllers
 
         //                                      ==== General user operations ====
 
+        //[HttpGet("users")]
+        //public async Task<ActionResult<List<User>>> GetAllUsers()
+        //{
+        //    return Ok(await _context.User.ToListAsync());
+        //}
+
         [HttpGet("users")]
-        public async Task<ActionResult<List<User>>> GetAllUsers()
+        public async Task<ActionResult<User>> SearchUserByEmail(string email)
         {
-            return Ok(await _context.User.ToListAsync());
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
+
+
 
         //[HttpPost("users")]
         //public async Task<ActionResult<User>> AddUser(User user)

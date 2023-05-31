@@ -4,6 +4,7 @@ using AbruzaCosmicProducts_Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AbruzaCosmicProducts_Backend.Migrations
 {
     [DbContext(typeof(AbruzaDBContext))]
-    partial class AbruzaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230531144215_hello3")]
+    partial class hello3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

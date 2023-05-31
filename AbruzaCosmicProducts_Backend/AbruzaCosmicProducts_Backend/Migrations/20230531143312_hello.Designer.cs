@@ -4,6 +4,7 @@ using AbruzaCosmicProducts_Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AbruzaCosmicProducts_Backend.Migrations
 {
     [DbContext(typeof(AbruzaDBContext))]
-    partial class AbruzaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230531143312_hello")]
+    partial class hello
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,15 +63,12 @@ namespace AbruzaCosmicProducts_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Zipcode")
                         .IsRequired()
@@ -117,6 +117,24 @@ namespace AbruzaCosmicProducts_Backend.Migrations
                     b.ToTable("Product");
                 });
 
+            modelBuilder.Entity("AbruzaCosmicProducts_Backend.Model.ProductId", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrderHistoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderHistoryId");
+
+                    b.ToTable("ProductId");
+                });
+
             modelBuilder.Entity("AbruzaCosmicProducts_Backend.Model.User", b =>
                 {
                     b.Property<int>("Id")
@@ -144,6 +162,22 @@ namespace AbruzaCosmicProducts_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("AbruzaCosmicProducts_Backend.Model.ProductId", b =>
+                {
+                    b.HasOne("AbruzaCosmicProducts_Backend.Model.OrderHistory", "OrderHistory")
+                        .WithMany("ProductIds")
+                        .HasForeignKey("OrderHistoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderHistory");
+                });
+
+            modelBuilder.Entity("AbruzaCosmicProducts_Backend.Model.OrderHistory", b =>
+                {
+                    b.Navigation("ProductIds");
                 });
 #pragma warning restore 612, 618
         }
