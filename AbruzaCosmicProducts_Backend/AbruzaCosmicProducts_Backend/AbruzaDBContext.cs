@@ -23,7 +23,14 @@ namespace AbruzaCosmicProducts_Backend
                 .Property(e => e.Total)
                 .HasColumnType("decimal(18, 2)");
 
+            modelBuilder.Entity<OrderHistory>()
+                .HasMany(o => o.Products)
+                .WithMany() // Many-to-many relationship
+                .UsingEntity(join => join.ToTable("OrderHistoryProduct")); // Create a junction table named "OrderHistoryProduct"
         }
+
+
+
 
     }
 

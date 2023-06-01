@@ -16,8 +16,10 @@ namespace AbruzaCosmicProducts_Backend.Model
         public string Zipcode { get; set; }
         public string Country { get; set; }
         public int CardNumber { get; set; }
-        public int ProductId { get; set; }
+        //public int ProductId { get; set; }
 
+        // Define a navigation property to represent the collection of products related to this order
+        public List<Product> Products { get; set; }
     }
 }
 

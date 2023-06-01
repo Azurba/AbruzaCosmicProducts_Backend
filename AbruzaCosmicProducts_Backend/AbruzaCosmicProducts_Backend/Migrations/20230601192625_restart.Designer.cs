@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AbruzaCosmicProducts_Backend.Migrations
 {
     [DbContext(typeof(AbruzaDBContext))]
-    [Migration("20230531144215_hello3")]
-    partial class hello3
+    [Migration("20230601192625_restart")]
+    partial class restart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,9 +62,6 @@ namespace AbruzaCosmicProducts_Backend.Migrations
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -147,6 +144,36 @@ namespace AbruzaCosmicProducts_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("OrderHistoryProduct", b =>
+                {
+                    b.Property<int>("OrderHistoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderHistoryId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("OrderHistoryProduct", (string)null);
+                });
+
+            modelBuilder.Entity("OrderHistoryProduct", b =>
+                {
+                    b.HasOne("AbruzaCosmicProducts_Backend.Model.OrderHistory", null)
+                        .WithMany()
+                        .HasForeignKey("OrderHistoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AbruzaCosmicProducts_Backend.Model.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

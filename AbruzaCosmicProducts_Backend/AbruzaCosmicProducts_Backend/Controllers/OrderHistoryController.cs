@@ -36,6 +36,13 @@ namespace AbruzaCosmicProducts_Backend.Controllers
         {
             try
             {
+                // Iterate over the products and attach them to the context
+                foreach (var product in orderHistory.Products)
+                {
+                    _context.Attach(product);
+                    _context.Entry(product).Property("Id").IsModified = false;
+                }
+
                 _context.OrderHistory.Add(orderHistory);
                 await _context.SaveChangesAsync();
 
@@ -43,9 +50,12 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Failed to add order history: {ex.Message}");
+                var innerException = ex.InnerException;
+                return StatusCode(500, $"Failed to add order history: {ex.Message}, innerException: {innerException.Message}");
             }
         }
+
+
 
         [HttpGet("{email}")]
         public async Task<ActionResult<List<OrderHistory>>> GetOrderHistoryByEmail(string email)
