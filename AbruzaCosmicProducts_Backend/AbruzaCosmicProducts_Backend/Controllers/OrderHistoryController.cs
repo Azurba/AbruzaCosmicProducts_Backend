@@ -63,6 +63,7 @@ namespace AbruzaCosmicProducts_Backend.Controllers
             try
             {
                 var orderHistory = await _context.OrderHistory
+                    .Include(o => o.Products) // Eager load the products
                     .Where(o => o.Email == email)
                     .ToListAsync();
 
@@ -73,6 +74,7 @@ namespace AbruzaCosmicProducts_Backend.Controllers
                 return StatusCode(500, $"Failed to retrieve order history by email: {ex.Message}");
             }
         }
+
 
         //[HttpDelete]
         //public async Task<IActionResult> DeleteAll()
